@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_molecular_chat/screens/validation/validation.dart';
+
+import '../../http.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -221,10 +224,15 @@ class _RegisterState extends State<Register> {
         ));
   }
 
-  // Future<String> createUser(String email, String password) async {
-  //   FirebaseUser user = await _firebaseAuth.createUserWithEmailAndPassword(
-  //       email: email, password: password);
+  Future<String> registerUser() async {
+    try {
+      Response response = await http.post('register',data: );
+      print("registration response *****************");
+      return response.data;
+    } catch (error) {
+      print(error);
+    }
 
-  //   return user.uid;
-  // }
+    return null;
+  }
 }
