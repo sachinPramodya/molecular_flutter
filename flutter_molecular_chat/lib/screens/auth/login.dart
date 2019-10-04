@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_molecular_chat/models/user.dart';
 import 'package:flutter_molecular_chat/screens/auth/register.dart';
 import 'package:flutter_molecular_chat/screens/validation/validation.dart';
+
+import '../../http.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -8,7 +12,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _loginscaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _password = TextEditingController();
   final Validation validationObj = Validation.instance();
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -31,7 +35,7 @@ class _LoginState extends State<Login> {
     final double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        key: _scaffoldKey,
+        key: _loginscaffoldKey,
         body: Form(
           key: loginFormKey,
           autovalidate: autoValidate,
@@ -153,10 +157,11 @@ class _LoginState extends State<Login> {
                                   // TODO:
                                   // onPressed: login,
                                   onPressed: () {
-                                    if (loginFormKey.currentState.validate()) {}
-                                    setState(() {
-                                      autoValidate = true;
-                                    });
+                                    // if (loginFormKey.currentState.validate()) {}
+                                    // setState(() {
+                                    //   autoValidate = true;
+                                    // });
+                                    loginUser();
                                   },
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -212,5 +217,31 @@ class _LoginState extends State<Login> {
                       child: CircularProgressIndicator(),
                     )),
         ));
+  }
+
+  Future<String> loginUser() async {
+    try {
+      User user = new User(
+          username: _email.text.toString(),
+          password: _password.text.toString());
+      Response response = await http.post('user/login', data: user.toJson());
+      print(
+          "registration request *****************" + user.toJson().toString());
+      print("registration response *****************");
+      print(response.data.toString());
+
+      _loginscaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text(response.data.toString())),
+      );
+
+      return response.data;
+    } catch (error) {
+      _loginscaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("Something went wrong")),
+      );
+      print(error);
+    }
+
+    return null;
   }
 }

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_molecular_chat/models/user.dart';
 import 'package:flutter_molecular_chat/screens/validation/validation.dart';
 
 import '../../http.dart';
@@ -10,7 +12,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _regscaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
@@ -23,7 +25,7 @@ class _RegisterState extends State<Register> {
     final double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        key: _scaffoldKey,
+        key: _regscaffoldKey,
         body: Form(
           key: registerFormKey,
           autovalidate: autoValidate,
@@ -172,30 +174,32 @@ class _RegisterState extends State<Register> {
                         child: SizedBox.expand(
                           child: FlatButton(
                             onPressed: () {
-                              if (registerFormKey.currentState.validate()) {
-                                // print(_email.text);
-                                // print(_password.text);
-                                // createUser(_email.text, _password.text)
-                                //     .then((onValue) {
-                                //   Firestore.instance
-                                //       .collection('user')
-                                //       .document()
-                                //       .setData({
-                                //     "role": "user",
-                                //     "email": _email.text,
-                                //     "position": " ",
-                                //     "userId": onValue
-                                //   }).then((data) {
-                                //     Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //             builder: (context) => Login()));
-                                //   });
-                                // });
-                              }
-                              setState(() {
-                                autoValidate = true;
-                              });
+                              registerUser();
+                              // if (registerFormKey.currentState.validate()) {
+                              //   registerUser();
+                              //   // print(_email.text);
+                              //   // print(_password.text);
+                              //   // createUser(_email.text, _password.text)
+                              //   //     .then((onValue) {
+                              //   //   Firestore.instance
+                              //   //       .collection('user')
+                              //   //       .document()
+                              //   //       .setData({
+                              //   //     "role": "user",
+                              //   //     "email": _email.text,
+                              //   //     "position": " ",
+                              //   //     "userId": onValue
+                              //   //   }).then((data) {
+                              //   //     Navigator.push(
+                              //   //         context,
+                              //   //         MaterialPageRoute(
+                              //   //             builder: (context) => Login()));
+                              //   //   });
+                              //   // });
+                              // }
+                              // setState(() {
+                              //   autoValidate = true;
+                              // });
                             },
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -225,14 +229,41 @@ class _RegisterState extends State<Register> {
   }
 
   Future<String> registerUser() async {
+    print("called");
     try {
-      Response response = await http.post('register',data: );
+      User user = new User(
+          username: _email.text.toString(),
+          password: _password.text.toString());
+      Response response = await http.post('user/register', data: user.toJson());
+      print(
+          "registration request *****************" + user.toJson().toString());
       print("registration response *****************");
+      print(response.data.toString());
+
+      _regscaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text(response.data.toString())),
+      );
+
       return response.data;
     } catch (error) {
+      _regscaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("Something went wrong")),
+      );
       print(error);
     }
 
     return null;
   }
+
+  // void showMessage(String message) {
+  //   Scaffold.of(context).showSnackBar(
+  //     SnackBar(
+  //         content: Column(
+  //       children: <Widget>[
+  //         Text("Message from moleculer"),
+  //         Text(message),
+  //       ],
+  //     )),
+  //   );
+  // }
 }

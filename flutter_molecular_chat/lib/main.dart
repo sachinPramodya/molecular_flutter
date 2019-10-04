@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_molecular_chat/screens/auth/login.dart';
 
+import 'http.dart';
+
 
 void main() {
+  initHttp();
   return runApp(MyApp());
 }
 
