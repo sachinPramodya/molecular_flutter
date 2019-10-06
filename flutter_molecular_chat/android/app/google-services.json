@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "913978150049",
+    "firebase_url": "https://fluttermolecular-7cd66.firebaseio.com",
+    "project_id": "fluttermolecular-7cd66",
+    "storage_bucket": "fluttermolecular-7cd66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913978150049:android:5f4b2801cf209eb83ef4e0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_molecular_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913978150049-2vqkfbqp5eq2r0o6julqbogq4k5p9mas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEvlFRT9eV7uupLgUbWmD4MQsl9CjDTww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913978150049-2vqkfbqp5eq2r0o6julqbogq4k5p9mas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

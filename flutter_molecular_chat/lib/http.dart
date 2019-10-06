@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-final String basePath = "192.168.8.102:3000";
+final String basePath = "192.168.8.101:3000";
 
 final String baseUrl = "http://" + basePath + "/api/";
 
