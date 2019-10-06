@@ -12,11 +12,18 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  // key for identify the app scaffold
   final GlobalKey<ScaffoldState> _regscaffoldKey = GlobalKey<ScaffoldState>();
+
+  // user inputs save within these controllers
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
+
+  // used to validate user inputs
   final Validation validationObj = Validation.instance();
+
+  // key for identify the form
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
   bool autoValidate = false;
 
@@ -228,17 +235,19 @@ class _RegisterState extends State<Register> {
         ));
   }
 
+/**
+ * send the user inputs to the backend for registering.
+ */
   Future<String> registerUser() async {
-    print("called");
     try {
       User user = new User(
           username: _email.text.toString(),
           password: _password.text.toString());
       Response response = await http.post('user/register', data: user.toJson());
-      print(
-          "registration request *****************" + user.toJson().toString());
-      print("registration response *****************");
-      print(response.data.toString());
+      // print(
+      //     "registration request *****************" + user.toJson().toString());
+      // print("registration response *****************");
+      // print(response.data.toString());
 
       _regscaffoldKey.currentState.showSnackBar(
         SnackBar(content: Text(response.data.toString())),
@@ -254,16 +263,4 @@ class _RegisterState extends State<Register> {
 
     return null;
   }
-
-  // void showMessage(String message) {
-  //   Scaffold.of(context).showSnackBar(
-  //     SnackBar(
-  //         content: Column(
-  //       children: <Widget>[
-  //         Text("Message from moleculer"),
-  //         Text(message),
-  //       ],
-  //     )),
-  //   );
-  // }
 }
