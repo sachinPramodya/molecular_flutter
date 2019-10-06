@@ -18,6 +18,7 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // App bar of the chat screen
       appBar: AppBar(
         title: Text(
           'CHAT',
@@ -44,6 +45,7 @@ class Chat extends StatelessWidget {
     );
   }
 
+// logout the user when the setting button is pressed
   void logOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('userEmail');
@@ -67,7 +69,6 @@ class ChatScreenState extends State<ChatScreen> {
   ChatScreenState({Key key, @required this.peerId});
 
   String peerId;
-  String peerAvatar;
   String id;
 
   var listMessage;
@@ -107,6 +108,10 @@ class ChatScreenState extends State<ChatScreen> {
     }
   }
 
+/**
+ * read the saved details in the app locally.This data is saved in the login step.
+ * get that data and create a chat id to identify sender and receiver
+ */
   readLocal() async {
     prefs = await SharedPreferences.getInstance();
     id = prefs.getString('userEmail') ?? '';
@@ -130,44 +135,11 @@ class ChatScreenState extends State<ChatScreen> {
     setState(() {});
   }
 
-  // Future getImage() async {
-  //   imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-  //   if (imageFile != null) {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     uploadFile();
-  //   }
-  // }
-
-  // void getSticker() {
-  //   // Hide keyboard when sticker appear
-  //   focusNode.unfocus();
-  //   setState(() {
-  //     isShowSticker = !isShowSticker;
-  //   });
-  // }
-
-  // Future uploadFile() async {
-  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  //   StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
-  //   StorageUploadTask uploadTask = reference.putFile(imageFile);
-  //   StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-  //   storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
-  //     imageUrl = downloadUrl;
-  //     setState(() {
-  //       isLoading = false;
-  //       onSendMessage(imageUrl, 1);
-  //     });
-  //   }, onError: (err) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     Fluttertoast.showToast(msg: 'This file is not an image');
-  //   });
-  // }
-
+/**
+ * When the user touch the send button message is sent by calling to this method.
+ * Messages are saved in a collection called messages in the database.
+ * 
+ */
   void onSendMessage(String content, int type) {
     // type: 0 = text, 1 = image, 2 = sticker
     if (content.trim() != '') {
@@ -218,72 +190,6 @@ class ChatScreenState extends State<ChatScreen> {
             margin: EdgeInsets.only(
                 bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
           )
-          // : document['type'] == 1
-          //     // Image
-          //     ? Container(
-          //         child: FlatButton(
-          //           child: Material(
-          //             child: CachedNetworkImage(
-          //               placeholder: (context, url) => Container(
-          //                 child: CircularProgressIndicator(
-          //                   valueColor:
-          //                       AlwaysStoppedAnimation<Color>(themeColor),
-          //                 ),
-          //                 width: 200.0,
-          //                 height: 200.0,
-          //                 padding: EdgeInsets.all(70.0),
-          //                 decoration: BoxDecoration(
-          //                   color: greyColor2,
-          //                   borderRadius: BorderRadius.all(
-          //                     Radius.circular(8.0),
-          //                   ),
-          //                 ),
-          //               ),
-          //               errorWidget: (context, url, error) => Material(
-          //                 child: Image.asset(
-          //                   'images/img_not_available.jpeg',
-          //                   width: 200.0,
-          //                   height: 200.0,
-          //                   fit: BoxFit.cover,
-          //                 ),
-          //                 borderRadius: BorderRadius.all(
-          //                   Radius.circular(8.0),
-          //                 ),
-          //                 clipBehavior: Clip.hardEdge,
-          //               ),
-          //               imageUrl: document['content'],
-          //               width: 200.0,
-          //               height: 200.0,
-          //               fit: BoxFit.cover,
-          //             ),
-          //             borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          //             clipBehavior: Clip.hardEdge,
-          //           ),
-          //           onPressed: () {
-          //             Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                     builder: (context) =>
-          //                         FullPhoto(url: document['content'])));
-          //           },
-          //           padding: EdgeInsets.all(0),
-          //         ),
-          //         margin: EdgeInsets.only(
-          //             bottom: isLastMessageRight(index) ? 20.0 : 10.0,
-          //             right: 10.0),
-          //       )
-          //     // Sticker
-          //     : Container(
-          //         child: new Image.asset(
-          //           'images/${document['content']}.gif',
-          //           width: 100.0,
-          //           height: 100.0,
-          //           fit: BoxFit.cover,
-          //         ),
-          //         margin: EdgeInsets.only(
-          //             bottom: isLastMessageRight(index) ? 20.0 : 10.0,
-          //             right: 10.0),
-          //       ),
         ],
         mainAxisAlignment: MainAxisAlignment.end,
       );
@@ -294,32 +200,6 @@ class ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                // isLastMessageLeft(index)
-                //     ? Material(
-                //         child: CachedNetworkImage(
-                //           placeholder: (context, url) => Container(
-                //             child: CircularProgressIndicator(
-                //               strokeWidth: 1.0,
-                //               valueColor:
-                //                   AlwaysStoppedAnimation<Color>(themeColor),
-                //             ),
-                //             width: 35.0,
-                //             height: 35.0,
-                //             padding: EdgeInsets.all(10.0),
-                //           ),
-                //           imageUrl: peerAvatar,
-                //           width: 35.0,
-                //           height: 35.0,
-                //           fit: BoxFit.cover,
-                //         ),
-                //         borderRadius: BorderRadius.all(
-                //           Radius.circular(18.0),
-                //         ),
-                //         clipBehavior: Clip.hardEdge,
-                //       )
-                //     : Container(width: 35.0),
-                // document['type'] == 0
-                //     ?
                 Container(
                   child: Text(
                     document['content'],
@@ -332,70 +212,6 @@ class ChatScreenState extends State<ChatScreen> {
                       borderRadius: BorderRadius.circular(8.0)),
                   margin: EdgeInsets.only(left: 10.0),
                 )
-                // : document['type'] == 1
-                //     ? Container(
-                //         child: FlatButton(
-                //           child: Material(
-                //             child: CachedNetworkImage(
-                //               placeholder: (context, url) => Container(
-                //                 child: CircularProgressIndicator(
-                //                   valueColor: AlwaysStoppedAnimation<Color>(
-                //                       themeColor),
-                //                 ),
-                //                 width: 200.0,
-                //                 height: 200.0,
-                //                 padding: EdgeInsets.all(70.0),
-                //                 decoration: BoxDecoration(
-                //                   color: greyColor2,
-                //                   borderRadius: BorderRadius.all(
-                //                     Radius.circular(8.0),
-                //                   ),
-                //                 ),
-                //               ),
-                //               errorWidget: (context, url, error) =>
-                //                   Material(
-                //                 child: Image.asset(
-                //                   'images/img_not_available.jpeg',
-                //                   width: 200.0,
-                //                   height: 200.0,
-                //                   fit: BoxFit.cover,
-                //                 ),
-                //                 borderRadius: BorderRadius.all(
-                //                   Radius.circular(8.0),
-                //                 ),
-                //                 clipBehavior: Clip.hardEdge,
-                //               ),
-                //               imageUrl: document['content'],
-                //               width: 200.0,
-                //               height: 200.0,
-                //               fit: BoxFit.cover,
-                //             ),
-                //             borderRadius:
-                //                 BorderRadius.all(Radius.circular(8.0)),
-                //             clipBehavior: Clip.hardEdge,
-                //           ),
-                //           onPressed: () {
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => FullPhoto(
-                //                         url: document['content'])));
-                //           },
-                //           padding: EdgeInsets.all(0),
-                //         ),
-                //         margin: EdgeInsets.only(left: 10.0),
-                //       )
-                //     : Container(
-                //         child: new Image.asset(
-                //           'images/${document['content']}.gif',
-                //           width: 100.0,
-                //           height: 100.0,
-                //           fit: BoxFit.cover,
-                //         ),
-                //         margin: EdgeInsets.only(
-                //             bottom: isLastMessageRight(index) ? 20.0 : 10.0,
-                //             right: 10.0),
-                //       ),
               ],
             ),
 
@@ -486,116 +302,6 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // Widget buildSticker() {
-  //   return Container(
-  //     child: Column(
-  //       children: <Widget>[
-  //         Row(
-  //           children: <Widget>[
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi1', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi1.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi2', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi2.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi3', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi3.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             )
-  //           ],
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         ),
-  //         Row(
-  //           children: <Widget>[
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi4', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi4.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi5', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi5.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi6', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi6.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             )
-  //           ],
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         ),
-  //         Row(
-  //           children: <Widget>[
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi7', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi7.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi8', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi8.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //             FlatButton(
-  //               onPressed: () => onSendMessage('mimi9', 2),
-  //               child: new Image.asset(
-  //                 'images/mimi9.gif',
-  //                 width: 50.0,
-  //                 height: 50.0,
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             )
-  //           ],
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         )
-  //       ],
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //     ),
-  //     decoration: new BoxDecoration(
-  //         border: new Border(top: new BorderSide(color: greyColor2, width: 0.5)), color: Colors.white),
-  //     padding: EdgeInsets.all(5.0),
-  //     height: 180.0,
-  //   );
-  // }
-
   Widget buildLoading() {
     return Positioned(
       child: isLoading
@@ -614,30 +320,6 @@ class ChatScreenState extends State<ChatScreen> {
     return Container(
       child: Row(
         children: <Widget>[
-          // Button send image
-          // Material(
-          //   child: new Container(
-          //     margin: new EdgeInsets.symmetric(horizontal: 1.0),
-          //     child: new IconButton(
-          //       icon: new Icon(Icons.image),
-          //       onPressed: getImage,
-          //       color: primaryColor,
-          //     ),
-          //   ),
-          //   color: Colors.white,
-          // ),
-          // Material(
-          //   child: new Container(
-          //     margin: new EdgeInsets.symmetric(horizontal: 1.0),
-          //     child: new IconButton(
-          //       icon: new Icon(Icons.face),
-          //       onPressed: getSticker,
-          //       color: primaryColor,
-          //     ),
-          //   ),
-          //   color: Colors.white,
-          // ),
-
           // Edit text
           Flexible(
             child: Container(

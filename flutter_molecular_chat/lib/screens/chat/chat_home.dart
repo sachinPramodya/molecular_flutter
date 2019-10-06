@@ -6,6 +6,7 @@ import 'chat.dart';
 import 'const.dart';
 
 class ChatHome extends StatefulWidget {
+  // user email
   final String userEmail;
 
   ChatHome(this.userEmail);
@@ -18,16 +19,10 @@ class ChatHomeState extends State<ChatHome> {
   final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 
   bool isLoading = false;
-  // List<Choice> choices = const <Choice>[
-  //   const Choice(title: 'Settings', icon: Icons.settings),
-  //   const Choice(title: 'Log out', icon: Icons.exit_to_app),
-  // ];
 
   @override
   void initState() {
     super.initState();
-    // registerNotification();
-    // configLocalNotification();
   }
 
   @override
@@ -45,6 +40,12 @@ class ChatHomeState extends State<ChatHome> {
         child: Stack(
           children: <Widget>[
             // List
+            /**
+             * Get the users from the database.Here the data is comint as streams from the
+             * firebase.so we take all the user list and show to the user
+             * to choose a one to start the chat
+             * 
+             */
             Container(
               child: StreamBuilder(
                 stream: Firestore.instance.collection('users').snapshots(),
@@ -71,6 +72,11 @@ class ChatHomeState extends State<ChatHome> {
             // Loading
             Positioned(
               child: isLoading
+              /**
+               * It takes some time to load the data from the firebase to the app.
+               * so untill the data is loaded a progress indicator is shown
+               * 
+               */
                   ? Container(
                       child: Center(
                         child: CircularProgressIndicator(
@@ -88,7 +94,15 @@ class ChatHomeState extends State<ChatHome> {
     );
   }
 
+/**This widget is used to show the users in a list view.From the firebase we take a user list
+ * so we going through that list and show one by one by loop through the list
+ */
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
+    /**
+     * No need of showing currently logged user details to himself as
+     * he don't chat with himself.So the currently users details are
+     * not shown in the chat user list
+     */
     if (document['username'] == widget.userEmail) {
       return Container();
     } else {
