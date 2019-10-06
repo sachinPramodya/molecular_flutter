@@ -32,6 +32,13 @@ class _LoginState extends State<Login> {
     handleLogin();
   }
 
+/**
+ * when a user login to the app his token is saved in the app locally.Again when 
+ * the same user coming to the app without logout no need of login again
+ * he can directly go in to the app.we saved user token using shared preferences 
+ * plugin when a user is logged in.Here we handle that
+ * 
+ */
   void handleLogin() async {
     prefs = await SharedPreferences.getInstance();
     String userEmail = prefs.getString('userEmail');
@@ -262,17 +269,22 @@ class _LoginState extends State<Login> {
               ));
   }
 
+/**
+ * Called to the back-end API when the user credential are given.Currently it gives the 
+ * response 'LoginSuccess' for a successful login.After a successfrl login uder email is used as
+ * key to the shared preferences.
+ */
   Future<String> loginUser() async {
     try {
       User user = new User(
           username: _email.text.toString(),
           password: _password.text.toString());
       Response response = await http.post('user/login', data: user.toJson());
-      print(
-          "registration request *****************" + user.toJson().toString());
-      print(
-          "registration response *****************" + response.data.toString());
-      print(response.data.toString());
+      // print(
+      //     "registration request *****************" + user.toJson().toString());
+      // print(
+      //     "registration response *****************" + response.data.toString());
+      // print(response.data.toString());
 
       _loginscaffoldKey.currentState.showSnackBar(
         SnackBar(content: Text(response.data.toString())),
@@ -291,9 +303,11 @@ class _LoginState extends State<Login> {
       return response.data;
     } catch (error) {
       _loginscaffoldKey.currentState.showSnackBar(
-        SnackBar(content: Text("Something went wrong")),
+        SnackBar(
+          content: Text("Something went wrong"),
+        ), // if a error occured a error will be shown to the user
       );
-      print(error);
+     // print(error);
     }
 
     return null;
